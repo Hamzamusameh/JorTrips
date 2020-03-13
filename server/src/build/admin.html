@@ -19,10 +19,12 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color: #337ab7; ">
-        <a class="navbar-brand" style="color:white;" href="#">Navbar</a>
+        <a class="navbar-brand" style="color:white;" href="admin.html">Navbar</a>
     </nav>
     <div style="padding: 25px;">
-        <button type="button" class="btn btn-primary" style="margin-bottom: 10px;">Add New Point</button>
+        <button type="button" id="add-btn" class="btn btn-primary" style="margin-bottom: 10px;"><i
+                style="padding-right: 5px;" class="glyphicon glyphicon-plus-sign" aria-hidden="true"></i>Add New
+            Point</button>
         <div id="grid"></div>
     </div>
     <!-- all js here -->
@@ -34,39 +36,99 @@
         $(document).ready(function () {
             $("#grid").kendoGrid({
                 dataSource: {
-                    type: "odata",
                     transport: {
-                        read: "https://demos.telerik.com/kendo-ui/service/Northwind.svc/Customers"
+                        read: "/api/items/get"
                     },
                     pageSize: 20
                 },
-                height: 550,
                 groupable: true,
                 sortable: true,
+                filterable: true,
                 pageable: {
                     refresh: true,
                     pageSizes: true,
                     buttonCount: 5
                 },
-                columns: [{
-                    template: "<div class='customer-photo'" +
-                        "style='background-image: url(../content/web/Customers/#:data.CustomerID#.jpg);'></div>" +
-                        "<div class='customer-name'>#: ContactName #</div>",
-                    field: "ContactName",
-                    title: "Contact Name",
-                    width: 240
-                }, {
-                    field: "ContactTitle",
-                    title: "Contact Title"
-                }, {
-                    field: "CompanyName",
-                    title: "Company Name"
-                }, {
-                    field: "Country",
-                    width: 150
-                }]
+                columns: [
+                    {
+                        title: "Delete",
+                        attributes: { style: "text-align:center;" },
+                        headerAttributes: { style: "text-align: center" },
+                        template: function (dataItem) {
+                            return `<div class="btn-group" role="group" aria-label="Extra-small button group"><i style="color:red;" class="glyphicon glyphicon-remove" onclick="DeleteItem(${dataItem.ID})"></i></div>`;
+                        },
+                        filterable: false,
+                        sortable: false,
+                        width: '70px'
+                    },
+                    {
+                        title: "Edit",
+                        attributes: { style: "text-align:center;" },
+                        headerAttributes: { style: "text-align: center" },
+                        template: function (dataItem) {
+                            return `<div class="btn-group" role="group" aria-label="Extra-small button group"><i style="color:green" class="glyphicon glyphicon-edit" onclick="EditItem(${dataItem.ID})"></i></div>`;
+                        },
+                        filterable: false,
+                        sortable: false,
+                        width: '70px'
+                    },
+                    {
+                        field: "ArName",
+                        title: "Arabic Name",
+                        attributes: { style: "text-align:center;" },
+                        headerAttributes: { style: "text-align:center;" }
+                    }, {
+                        field: "EnName",
+                        title: "English Name",
+                        attributes: { style: "text-align:center;" },
+                        headerAttributes: { style: "text-align:center;" }
+                    }, {
+                        field: "ArDescription",
+                        title: "Arabic Description",
+                        attributes: { style: "text-align:center;" },
+                        headerAttributes: { style: "text-align:center;" }
+                    },
+                    {
+                        field: "EnDescription",
+                        title: "English Description",
+                        attributes: { style: "text-align:center;" },
+                        headerAttributes: { style: "text-align:center;" }
+                    },
+                    {
+                        field: "OwnerName",
+                        title: "Owner Name",
+                        attributes: { style: "text-align:center;" },
+                        headerAttributes: { style: "text-align:center;" }
+                    },
+                    {
+                        field: "Address",
+                        title: "Address",
+                        attributes: { style: "text-align:center;" },
+                        headerAttributes: { style: "text-align:center;" }
+                    },
+                    {
+                        field: "PhoneNumber",
+                        title: "Phone Number",
+                        attributes: { style: "text-align:center;" },
+                        headerAttributes: { style: "text-align:center;" }
+                    }]
             });
         });
+
+        $('#add-btn').on('click', function () {
+            window.location.href = 'AddNewItem.html';
+        });
+
+        function DeleteItem(id) {
+            $.ajax({
+                type: "DELETE",
+                url: `/api/items/delete/${id}`,
+                contentType: 'application/json',
+            }).done(function (data) {
+                $('#grid').data('kendoGrid').dataSource.read();
+            });
+
+        }
     </script>
 </body>
 
