@@ -8,7 +8,7 @@ $(document).ready(function () {
                                     </div>
                                     <div class="blog-content mt-20">
                                         <div class="blog-cnt-top">
-                                            <h5><a href="blog-details.html">Modern Architecture Design</a></h5>
+                                            <h5><a href="blog-details.html?id=${5}">Modern Architecture Design</a></h5>
                                             <span>By Jhon Deo, 07 am</span>
                                         </div>
                                         <p>Modern best Architect agency perspiciatis unde omniste natus error sit volutatem accusantium doloremque gftium, totam rem aperiam perspiciatis unde omnis iste natuserr</p>
